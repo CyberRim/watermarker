@@ -5,20 +5,25 @@ import argparse
 import os
 import sys
 import math
+import re
 
-from PIL import Image, ImageFont, ImageDraw, ImageEnhance, ImageChops
+from PIL import Image, ImageFont, ImageDraw, ImageEnhance, ImageChops, UnidentifiedImageError
 
 # TTF_FONT = u'./font/青鸟华光简琥珀.ttf'
 TTF_FONT = os.path.join("font", "青鸟华光简琥珀.ttf")
 TTF_FONT = os.path.join(os.path.dirname(os.path.abspath(__file__)), TTF_FONT)
 
 
+
 def add_mark(imagePath, mark, args):
     '''
     添加水印，然后保存图片
     '''
-    im = Image.open(imagePath)
 
+    try:
+        im = Image.open(imagePath)
+    except UnidentifiedImageError:
+        return
     image = mark(im)
     if image:
         name = os.path.basename(imagePath)
@@ -120,27 +125,27 @@ def gen_mark(args):
     return mark_im
 
 
-def main():
-    parse = argparse.ArgumentParser()
-    parse.add_argument("-f", "--file", type=str,
-                       help="image file path or directory")
-    parse.add_argument("-m", "--mark", type=str, help="watermark content")
-    parse.add_argument("-o", "--out", default="./output",
-                       help="image output directory, default is ./output")
-    parse.add_argument("-c", "--color", default="#8B8B1B", type=str,
-                       help="text color like '#000000', default is #8B8B1B")
-    parse.add_argument("-s", "--space", default=75, type=int,
-                       help="space between watermarks, default is 75")
-    parse.add_argument("-a", "--angle", default=30, type=int,
-                       help="rotate angle of watermarks, default is 30")
-    parse.add_argument("--size", default=50, type=int,
-                       help="font size of text, default is 50")
-    parse.add_argument("--opacity", default=0.15, type=float,
-                       help="opacity of watermarks, default is 0.15")
-    parse.add_argument("--quality", default=80, type=int,
-                       help="quality of output images, default is 90")
-
-    args = parse.parse_args()
+def marker(args=None):
+    if args is None:
+        parse = argparse.ArgumentParser()
+        parse.add_argument("-f", "--file", type=str,
+                        help="image file path or directory")
+        parse.add_argument("-m", "--mark", type=str, help="watermark content")
+        parse.add_argument("-o", "--out", default="./output",
+                        help="image output directory, default is ./output")
+        parse.add_argument("-c", "--color", default="#8B8B1B", type=str,
+                        help="text color like '#000000', default is #8B8B1B")
+        parse.add_argument("-s", "--space", default=75, type=int,
+                        help="space between watermarks, default is 75")
+        parse.add_argument("-a", "--angle", default=30, type=int,
+                        help="rotate angle of watermarks, default is 30")
+        parse.add_argument("--size", default=50, type=int,
+                        help="font size of text, default is 50")
+        parse.add_argument("--opacity", default=0.15, type=float,
+                        help="opacity of watermarks, default is 0.15")
+        parse.add_argument("--quality", default=80, type=int,
+                        help="quality of output images, default is 90")
+        args = parse.parse_args()
 
     if isinstance(args.mark, str) and sys.version_info[0] < 3:
         args.mark = args.mark.decode("utf-8")
@@ -154,7 +159,5 @@ def main():
             add_mark(image_file, mark, args)
     else:
         add_mark(args.file, mark, args)
-
-
 if __name__ == '__main__':
-    main()
+    marker();

@@ -1,0 +1,11 @@
+{
+    "angle": 30,
+    "color": "#8B8B1B",
+    "file": "./input",
+    "mark": "水印水印",
+    "opacity": 0.15,
+    "out": "./output",
+    "quality": 80,
+    "size": 50,
+    "space": 75
+}
