@@ -32,3 +32,25 @@ optional arguments:
 `python marker.py -f ./input/test.png -m 添加水印`
 
 ![](https://github.com/2Dou/watermarker/raw/master/output/test.png)
+
+# 修改
+
+套了个壳，本仓库下的版本比原版本增加了配置文件，参数写在同目录下的config.json中。
+
+默认参数：
+
+```javascript
+{
+    "angle": 30,
+    "color": "#8B8B1B",
+    "file": "./input",
+    "mark": "添加水印",
+    "opacity": 0.15,
+    "out": "./output",
+    "quality": 80,
+    "size": 50,
+    "space": 75
+}
+```
+
+`python watermarker.py`
